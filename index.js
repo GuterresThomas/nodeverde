@@ -3,9 +3,11 @@ const express = require('express');
 const { Client } = require('pg');
 const app = express();
 const router = express.Router();
+const cors = require('cors'); 
 
 
 const http = require('http');
+
 
 
 //const authRoutes = require('./routes/auth');
@@ -38,7 +40,9 @@ client.query('SELECT * FROM usuarios', (err, res) => {
   client.end(); // Fecha a conexão
 });
 
-
+app.use(cors({
+  origin: 'http://localhost:3002' // Substitua pelo seu domínio React
+}));
 app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
@@ -82,8 +86,6 @@ const client2 = new Client({
    // Fecha a conexão
 });
 
-  //node index.js//
-
   app.use(express.urlencoded({extended: false}))
   app.use(express.json());
 
@@ -107,8 +109,11 @@ app.get('/databases', (req, res) => {
           res.status(404).json({ message: 'Nenhuma tabela encontrada' });
         }
       }
+
+      client2.end();
     }
   );
+  
 });
 
 
