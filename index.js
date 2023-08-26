@@ -110,7 +110,7 @@ app.get('/databases', (req, res) => {
         }
       }
 
-      client2.end();
+      client.end();
     }
   );
   
