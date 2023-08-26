@@ -116,7 +116,129 @@ app.get('/databases', (req, res) => {
   
 });
 
+const client3 = new Client({
+  user: 'postgres',
+  host: '127.0.0.1',
+  database: 'postgres',
+  password: '1234',
+  port: 5432,  // Porta padrão do PostgreSQL
+});
+client3.connect();
 
+app.use(express.urlencoded({extended: false}))
+app.use(express.json());
+
+app.post('/databases/insert', (req, res) => {
+  const { nome, tipo } = req.body;
+// Conecta ao segundo banco de dados
+console.log(nome+tipo)
+client3.query(
+  "INSERT INTO databases_clientes (nome) values ('"+nome+"')",
+  (err, result) => {
+    if (err) {
+      console.error(err);
+      // Trate o erro e envie uma resposta de erro se necessário
+      res.status(500).json({ message: 'Erro de servidor' });
+      return;     
+    } else {
+      if (result.rows.length > 0) {
+        // Aqui, você pode processar os resultados da consulta
+        console.log(result.rows);
+        res.status(200).json(result.rows);
+      } else {
+        res.status(404).json({ message: 'Nenhuma tabela encontrada' });
+      }
+    }
+
+    client.end();
+  }
+);
+
+});
+
+
+const client4 = new Client({
+  user: 'usuario_verde',
+  host: '172.27.32.199',
+  database: 'VERDE', // Nome do segundo banco de dados
+  password: 'fou3%sdf',
+  port: 5432,  // Porta padrão do PostgreSQL
+});
+client4.connect();
+
+app.use(express.urlencoded({extended: false}))
+app.use(express.json());
+
+app.post('/databases/dinamicos', (req, res) => {
+  const { tabela } = req.body;
+// Conecta ao segundo banco de dados
+console.log(tabela)
+client4.query(
+  "SELECT * FROM "+tabela+"",
+  (err, result) => {
+    if (err) {
+      console.error(err);
+      // Trate o erro e envie uma resposta de erro se necessário
+      res.status(500).json({ message: 'Erro de servidor' });
+      return;     
+    } else {
+      if (result.rows.length > 0) {
+        // Aqui, você pode processar os resultados da consulta
+        console.log(result.rows);
+        res.status(200).json(result.rows);
+      } else {
+        res.status(404).json({ message: 'Nenhuma tabela encontrada' });
+      }
+    }
+
+    client.end();
+  }
+);
+
+});
+const client5 = new Client({
+  user: 'postgres',
+  host: '127.0.0.1',
+  database: 'postgres',
+  password: '1234',
+  port: 5432  // Porta padrão do PostgreSQL
+});
+client5.connect();
+
+app.use(express.urlencoded({extended: false}))
+app.use(express.json());
+
+app.get('/databasesclientes', (req, res) => {
+  
+// Conecta ao segundo banco de dados
+client5.query(
+  "SELECT * FROM databases_clientes",
+  (err, result) => {
+    if (err) {
+      console.error(err);
+      // Trate o erro e envie uma resposta de erro se necessário
+      res.status(500).json({ message: 'Erro de servidor' });
+      return;     
+    } else {
+      if (result.rows.length > 0) {
+        // Aqui, você pode processar os resultados da consulta
+        console.log(result.rows);
+        res.status(200).json(result.rows);
+      } else {
+        res.status(404).json({ message: 'Nenhuma tabela encontrada' });
+      }
+    }
+
+    client.end();
+  }
+);
+
+});
+
+
+app.get('/', (req, res) => {
+  res.send('Hello, Express!');
+});
 
 
 
