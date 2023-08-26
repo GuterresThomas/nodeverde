@@ -65,7 +65,7 @@ const client = new Client({
     } else {
       console.log(res.rows);
     }
-    client.end(); // Fecha a conexão
+     // Fecha a conexão
   });
 
     app.use(express.urlencoded({extended: false}))
@@ -75,7 +75,7 @@ const client = new Client({
     
     // Conecta ao segundo banco de dados
     client2.query(
-      'SELECT * FROM avaliacoes WHERE id=1',
+      'SELECT * FROM avaliacoes',
       (err, result) => {
         if (err) {
           console.error(err);
