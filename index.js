@@ -82,10 +82,12 @@ const client2 = new Client({
    // Fecha a conexão
 });
 
+  //node index.js//
+
   app.use(express.urlencoded({extended: false}))
   app.use(express.json());
 
-app.post('/databases', (req, res) => {
+app.get('/databases', (req, res) => {
   
   // Conecta ao segundo banco de dados
   client2.query(
