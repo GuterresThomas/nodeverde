@@ -50,42 +50,49 @@ const client = new Client({
     );
   });
 
-  app.post('/databases', (req, res) => {
-    const client2 = new Client({
+  const client2 = new Client({
       user: 'usuario_verde',
       host: '172.27.32.199',
       database: 'VERDE', // Nome do segundo banco de dados
       password: 'fou3%sdf',
       port: 5432, // Porta padrão do PostgreSQL
     });
-  
-    // Conecta ao segundo banco de dados
     client2.connect();
-  
+    
+    client2.query('SELECT * FROM avaliacoes', (err, res) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(res.rows);
+    }
+    client.end(); // Fecha a conexão
+  });
+
+    app.use(express.urlencoded({extended: false}))
+    app.use(express.json());
+
+  app.post('/databases', (req, res) => {
+    
+    // Conecta ao segundo banco de dados
     client2.query(
-      "SELECT * FROM clientes WHERE id = 1",
+      'SELECT * FROM avaliacoes WHERE id=1',
       (err, result) => {
         if (err) {
-            console.error(err);
-            // Trate o erro e envie uma resposta de erro se necessário
-            res.status(500).json({ message: 'Erro de servidor' });
-            return;     
-        }
-         else {
+          console.error(err);
+          // Trate o erro e envie uma resposta de erro se necessário
+          res.status(500).json({ message: 'Erro de servidor' });
+          return;     
+        } else {
           if (result.rows.length > 0) {
             // Aqui, você pode processar os resultados da consulta
-            console.log(result.rows)
+            console.log(result.rows);
             res.status(200).json(result.rows);
-            
           } else {
             res.status(404).json({ message: 'Nenhuma tabela encontrada' });
           }
         }
-  
-        // Certifique-se de que o client2 é desconectado após a consulta
-        client2.end();
       }
     );
-  });  
+  });
   
 module.exports = router;
