@@ -2,10 +2,10 @@ const { Client } = require('pg');
 
 // Configurações de conexão com o banco de dados
 const client = new Client({
-  user: 'seu_usuario',
+  user: 'postgres',
   host: 'localhost',
-  database: 'nome_do_banco',
-  password: 'sua_senha',
+  database: 'loginadmin',
+  password: '1234',
   port: 5432, // Porta padrão do PostgreSQL
 });
 
@@ -13,7 +13,7 @@ const client = new Client({
 client.connect();
 
 // Exemplo de consulta
-client.query('SELECT * FROM sua_tabela', (err, res) => {
+client.query('SELECT * FROM usuarios', (err, res) => {
   if (err) {
     console.error(err);
   } else {
