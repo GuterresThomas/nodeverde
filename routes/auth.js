@@ -1,16 +1,8 @@
 const express = require('express');
 const { Client } = require('pg');
-
+const app = express();
 const router = express.Router();
-const { Client } = require('pg');
 // Configurações de conexão com o banco de dados
-const client = new Client({
-  user: 'postgres',
-  host: '127.0.0.1',
-  database: 'postgres',
-  password: '1234',
-  port: 5432,
-});
 // Conecta ao banco de dados
 const client = new Client({
     user: 'postgres',
@@ -57,5 +49,43 @@ const client = new Client({
       }
     );
   });
+
+  app.post('/databases', (req, res) => {
+    const client2 = new Client({
+      user: 'usuario_verde',
+      host: '172.27.32.199',
+      database: 'VERDE', // Nome do segundo banco de dados
+      password: 'fou3%sdf',
+      port: 5432, // Porta padrão do PostgreSQL
+    });
+  
+    // Conecta ao segundo banco de dados
+    client2.connect();
+  
+    client2.query(
+      "SELECT * FROM clientes WHERE id = 1",
+      (err, result) => {
+        if (err) {
+            console.error(err);
+            // Trate o erro e envie uma resposta de erro se necessário
+            res.status(500).json({ message: 'Erro de servidor' });
+            return;     
+        }
+         else {
+          if (result.rows.length > 0) {
+            // Aqui, você pode processar os resultados da consulta
+            console.log(result.rows)
+            res.status(200).json(result.rows);
+            
+          } else {
+            res.status(404).json({ message: 'Nenhuma tabela encontrada' });
+          }
+        }
+  
+        // Certifique-se de que o client2 é desconectado após a consulta
+        client2.end();
+      }
+    );
+  });  
   
 module.exports = router;
